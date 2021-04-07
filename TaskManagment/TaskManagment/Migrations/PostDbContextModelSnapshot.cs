@@ -8,7 +8,7 @@ using TaskManagment.AppData;
 
 namespace TaskManagment.Migrations
 {
-    [DbContext(typeof(PostDbContext))]
+    [DbContext(typeof(TaskManagementDbContext))]
     partial class PostDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -19,9 +19,9 @@ namespace TaskManagment.Migrations
                 .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("TaskManagment.Models.Post", b =>
+            modelBuilder.Entity("TaskManagment.Models.TaskUnit", b =>
                 {
-                    b.Property<int>("PostId")
+                    b.Property<int>("TaskUnitId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -38,9 +38,9 @@ namespace TaskManagment.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("PostId");
+                    b.HasKey("TaskUnitId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Tasks");
                 });
 #pragma warning restore 612, 618
         }

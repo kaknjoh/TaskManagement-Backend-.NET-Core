@@ -6,10 +6,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using TaskManagment.AppData;
+using TaskManagment.DAL;
+using TaskManagment.Domain;
 
 namespace TaskManagment
 {
@@ -26,6 +30,13 @@ namespace TaskManagment
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddScoped<ITaskUnitService, TaskUnitService>();
+
+            services.AddScoped<ITaskUnitRepository, TaskUnitRepository>();
+
+            services.AddDbContextPool<TaskManagementDbContext>(
+                    options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,7 +48,7 @@ namespace TaskManagment
             }
 
             app.UseHttpsRedirection();
-
+            
             app.UseRouting();
 
             app.UseAuthorization();

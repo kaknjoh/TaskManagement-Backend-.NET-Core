@@ -7,14 +7,14 @@ using TaskManagment.Models;
 
 namespace TaskManagment.AppData
 {
-    public class PostDbContext : DbContext
+    public class TaskManagementDbContext : DbContext
     {
-        public PostDbContext(DbContextOptions<PostDbContext> options)
+        public TaskManagementDbContext(DbContextOptions<TaskManagementDbContext> options)
            : base(options)
         {
 
         }
 
-        public virtual DbSet<Post> Posts { get; set; }
+        public virtual DbSet<TaskUnit> Tasks { get; set; }
     }
 }

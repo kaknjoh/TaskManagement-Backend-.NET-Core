@@ -5,17 +5,16 @@ using System.Threading.Tasks;
 
 namespace TaskManagment.Models
 {
-    public class Post
+    public class TaskUnit
     {
-        public int PostId { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public int TaskUnitId { get; set; }
 
+        public string Name { get; set; }
+
+        public string Description { get; set; }
 
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
-
-        
     }
 }

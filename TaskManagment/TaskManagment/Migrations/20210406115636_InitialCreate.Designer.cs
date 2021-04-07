@@ -9,7 +9,7 @@ using TaskManagment.AppData;
 
 namespace TaskManagment.Migrations
 {
-    [DbContext(typeof(PostDbContext))]
+    [DbContext(typeof(TaskManagementDbContext))]
     [Migration("20210406115636_InitialCreate")]
     partial class InitialCreate
     {
