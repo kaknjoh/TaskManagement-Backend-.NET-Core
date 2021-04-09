@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TaskManagment.DTOS;
 using TaskManagment.Models;
 
 namespace TaskManagment.Domain
@@ -9,15 +10,15 @@ namespace TaskManagment.Domain
     public interface ITaskUnitService
     {
 
-        public  Task<IEnumerable<TaskUnit>> GetAllTaskUnitsAsync();
+        public  Task<IList<ViewTaskUnitDTO>> GetAllTaskUnitsAsync();
 
-        public Task SaveTaskUnitAsync(TaskUnit taskUnit);
+        public Task<TaskUnitDTO> SaveTaskUnitAsync(TaskUnitDTO taskUnitDto);
 
-        public Task<TaskUnit> GetTaskUnitByIdAsync(int id);
+        public Task<ViewTaskUnitDTO> GetTaskUnitByIdAsync(int id);
 
-        public Task EditTaskUnitAsync(TaskUnit taskUnitInDb , TaskUnit editTaskUnit );
+        public Task EditTaskUnitAsync(TaskUnitDTO editTaskUnit );
 
-        public Task DeleteTaskUnitAsync(TaskUnit taskUnit);
+        public Task DeleteTaskUnitAsync(ViewTaskUnitDTO taskUnit);
 
     }
 }

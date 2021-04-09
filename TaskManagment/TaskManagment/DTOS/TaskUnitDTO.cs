@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TaskManagment.Models
+namespace TaskManagment.DTOS
 {
-    public class TaskUnit
+    public class TaskUnitDTO
     {
-        [Key]
+
         public int TaskUnitId { get; set; }
 
         public string Name { get; set; }
@@ -19,8 +18,6 @@ namespace TaskManagment.Models
 
         public DateTime EndDate { get; set; }
 
-        public ICollection<AssignedUserTaskUnit> AssignedUserTaskUnits { get; set; }
-
-        
+        public List<string> AssignedUsers { get; set; }
     }
 }

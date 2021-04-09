@@ -8,9 +8,9 @@ namespace TaskManagment.DAL
 {
     public interface ITaskUnitRepository
     {
-        Task<IEnumerable<TaskUnit>> GetAllTaskUnitsAsync();
+        Task<IList<TaskUnit>> GetAllTaskUnitsAsync();
 
-        Task SaveTaskUnitAsync(TaskUnit taskUnit);
+        Task<TaskUnit> SaveTaskUnitAsync(TaskUnit taskUnit);
 
         Task<TaskUnit> GetTaskUnitByIdAsync(int id);
 

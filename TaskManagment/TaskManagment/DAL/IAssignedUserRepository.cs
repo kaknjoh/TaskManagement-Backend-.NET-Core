@@ -17,8 +17,5 @@ namespace TaskManagment.DAL
         public Task EditAssignedUserAsync(AssignedUser assignedUser);
 
         public Task DeleteAssignedUserAsync(AssignedUser assignedUser);
-
-
-
     }
 }

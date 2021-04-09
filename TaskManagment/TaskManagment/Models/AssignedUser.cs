@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace TaskManagment.Models
 {
     public class AssignedUser
     {
-        public AssignedUser()
-        {
-            this.TaskUnits = new HashSet<TaskUnit>();
-        }
+        
         public int AssignedUserId { get; set; }
 
         [StringLength(50)]
@@ -19,6 +17,7 @@ namespace TaskManagment.Models
         [StringLength(50)]
         public string LastName { get; set; }
 
-        public virtual ICollection<TaskUnit> TaskUnits { get; set; }
+        [JsonIgnore]
+        public ICollection<AssignedUserTaskUnit> AssignedUserTaskUnits { get; set; }
     }
 }
