@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using TaskManagment.AppData;
+using TaskManagment.AutoMapperProfiles;
 using TaskManagment.DAL;
 using TaskManagment.Domain;
 
@@ -34,6 +36,24 @@ namespace TaskManagment
             services.AddScoped<ITaskUnitService, TaskUnitService>();
 
             services.AddScoped<ITaskUnitRepository, TaskUnitRepository>();
+
+            services.AddScoped<IAssignedUserService, AssignedUserService>();
+
+            services.AddScoped<IAssignedUserRepository, AssignedUserRepository>();
+
+            services.AddScoped<IAssignedUserTaskUnitService, AssignedUserTaskUnitService>();
+
+            services.AddScoped<IAssignedUserTaskUnitsRepository, AssignedUserTaskUnitRepository>();
+
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddDbContextPool<TaskManagementDbContext>(
                     options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));

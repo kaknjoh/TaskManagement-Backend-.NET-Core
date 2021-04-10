@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using TaskManagment.DAL;
 using TaskManagment.Domain;
+using TaskManagment.DTOS;
 using TaskManagment.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -17,10 +19,12 @@ namespace TaskManagment.Controllers
     {
         private readonly ITaskUnitService _taskUnitService;
         private readonly ILogger<TaskUnitController> _logger;
-        public TaskUnitController(ITaskUnitService taskUnitService, ILogger<TaskUnitController> logger)
+        private readonly ITaskUnitRepository _taskUnitRepository;
+        public TaskUnitController(ITaskUnitService taskUnitService, ILogger<TaskUnitController> logger, ITaskUnitRepository _taskUnitRepository)
         {
             _taskUnitService = taskUnitService;
             _logger = logger;
+            this._taskUnitRepository = _taskUnitRepository;
         }
 
         // GET: api/taskunit
@@ -34,7 +38,7 @@ namespace TaskManagment.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTaskUnitById(int id)
         {
-            TaskUnit taskUnitInDb = await _taskUnitService.GetTaskUnitByIdAsync(id);
+            ViewTaskUnitDTO taskUnitInDb = await _taskUnitService.GetTaskUnitByIdAsync(id);
             if (taskUnitInDb == null)
             {
                 return NotFound();
@@ -45,22 +49,25 @@ namespace TaskManagment.Controllers
 
         // POST taskunit/Post
         [HttpPost]
-        public async Task<IActionResult> SavePost(TaskUnit taskUnit)
+        public async Task<IActionResult> SavePost(TaskUnitDTO taskUnitDto)
         {
-            await _taskUnitService.SaveTaskUnitAsync(taskUnit);
-            return CreatedAtAction(nameof(GetTaskUnitById), new { id = taskUnit.TaskUnitId }, taskUnit);
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var result=await _taskUnitService.SaveTaskUnitAsync(taskUnitDto);
+            return CreatedAtAction(nameof(GetTaskUnitById), new { id =  result.TaskUnitId}, taskUnitDto);
         }
 
         // PUT api/taskunit
         [HttpPut]
-        public async Task<IActionResult> Put( TaskUnit taskUnit)
+        public async Task<IActionResult> Put( TaskUnitDTO taskUnit)
         {
-            TaskUnit taskUnitInDb = await _taskUnitService.GetTaskUnitByIdAsync(taskUnit.TaskUnitId);
-            if (taskUnitInDb == null)
+            ViewTaskUnitDTO taskUnitDTO = await _taskUnitService.GetTaskUnitByIdAsync(taskUnit.TaskUnitId);
+            if (taskUnitDTO == null)
             {
                 return NotFound();
             }
-            await _taskUnitService.EditTaskUnitAsync(taskUnitInDb, taskUnit);
+            await _taskUnitService.EditTaskUnitAsync(taskUnit);
             return Ok();
         }
 
@@ -68,12 +75,12 @@ namespace TaskManagment.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            TaskUnit taskUnitInDb = await _taskUnitService.GetTaskUnitByIdAsync(id);
-            if(taskUnitInDb == null)
+            ViewTaskUnitDTO taskUnitDTO = await _taskUnitService.GetTaskUnitByIdAsync(id);
+            if(taskUnitDTO == null)
             {
                 return NotFound();
             }
-            await _taskUnitService.DeleteTaskUnitAsync(taskUnitInDb);
+            await _taskUnitService.DeleteTaskUnitAsync(taskUnitDTO);
             return Ok();
         }
     }

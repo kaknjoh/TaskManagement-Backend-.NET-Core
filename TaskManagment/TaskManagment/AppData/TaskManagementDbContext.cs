@@ -16,5 +16,13 @@ namespace TaskManagment.AppData
         }
 
         public virtual DbSet<TaskUnit> Tasks { get; set; }
+        public virtual DbSet<AssignedUser> AssignedUsers { get; set; }
+        public virtual DbSet<AssignedUserTaskUnit> AssignedUserTaskUnits { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<AssignedUserTaskUnit>()
+            .HasKey(cs => new { cs.AssignedUserId, cs.TaskUnitId });
+        }
     }
 }
