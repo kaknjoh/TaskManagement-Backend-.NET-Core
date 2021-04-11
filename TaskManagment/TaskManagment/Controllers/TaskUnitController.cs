@@ -27,11 +27,19 @@ namespace TaskManagment.Controllers
             this._taskUnitRepository = _taskUnitRepository;
         }
 
-        // GET: api/taskunit
+        // GET: api/taskunit  
         [HttpGet]
         public async Task<IActionResult>GetAllTaskUnits()
         {
             return Ok(await _taskUnitService.GetAllTaskUnitsAsync());
+        }
+
+        // GET: api/taskunit/getallsoftdeletedtaskunits
+        
+        [HttpGet("getallsoftdeletedtaskunits")]
+        public async Task<IActionResult> GetAllSoftDeletedTaskUnits()
+        {
+            return Ok(await _taskUnitService.GetAllSoftDeletedTaskUnitsAsync());
         }
 
         // GET api/taskunit/5
@@ -47,6 +55,19 @@ namespace TaskManagment.Controllers
             return  Ok(await _taskUnitService.GetTaskUnitByIdAsync(id));
         }
 
+
+        // GET api/taskunit/getbacksoftdeletedtaskunit/5
+        [HttpGet("getbacksoftdeletedtaskunit/{id}")]
+        public async Task<IActionResult> GetBackSoftDeletedTaskUnitById(int id)
+        {
+            ViewTaskUnitDTO taskUnitInDb = await _taskUnitService.GetTaskUnitByIdAsync(id);
+            if (taskUnitInDb == null)
+            {
+                return Ok(await _taskUnitService.GetBackSoftDeletedTaskUnitByIdAsync(id));
+            }
+            return NotFound();
+        }
+
         // POST taskunit/Post
         [HttpPost]
         public async Task<IActionResult> SavePost(TaskUnitDTO taskUnitDto)
@@ -55,7 +76,7 @@ namespace TaskManagment.Controllers
                 return BadRequest();
 
             var result=await _taskUnitService.SaveTaskUnitAsync(taskUnitDto);
-            return CreatedAtAction(nameof(GetTaskUnitById), new { id =  result.TaskUnitId}, taskUnitDto);
+            return CreatedAtAction(nameof(GetBackSoftDeletedTaskUnitById), new { id =  result.TaskUnitId}, taskUnitDto);
         }
 
         // PUT api/taskunit
@@ -81,6 +102,19 @@ namespace TaskManagment.Controllers
                 return NotFound();
             }
             await _taskUnitService.DeleteTaskUnitAsync(taskUnitDTO);
+            return Ok();
+        }
+
+        // DELETE api/taskunit/softdeletetaskunit/5
+        [HttpDelete("softdeletetaskunit/{id}")]
+        public async Task<IActionResult> SoftDeleteTaskUnit(int id)
+        {
+            ViewTaskUnitDTO taskUnitDTO = await _taskUnitService.GetTaskUnitByIdAsync(id);
+            if (taskUnitDTO == null)
+            {
+                return NotFound();
+            }
+            await _taskUnitService.SoftDeleteTaskUnitAsync(id);
             return Ok();
         }
     }

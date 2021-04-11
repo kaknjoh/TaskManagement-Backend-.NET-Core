@@ -17,5 +17,11 @@ namespace TaskManagment.DAL
         Task EditTaskUnitAsync(TaskUnit taskUnit);
 
         Task DeleteTaskUnitAsync(TaskUnit taskUnit);
+
+        Task SoftDeleteTaskUnitAsync(int id);
+
+        Task GetBackSoftDeleteTaskUnitByIdAsync(int id);
+
+        Task<IList<TaskUnit>> GetAllSoftDeletedTaskUnitsAsync();
     }
 }

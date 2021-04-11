@@ -55,6 +55,20 @@ namespace TaskManagment.Domain
             await _taskUnitRepository.EditTaskUnitAsync(taskUnit);
         }
 
+        public async Task<IList<ViewTaskUnitDTO>> GetAllSoftDeletedTaskUnitsAsync()
+        {
+            IList<TaskUnit> result = await _taskUnitRepository.GetAllSoftDeletedTaskUnitsAsync();
+            IList<ViewTaskUnitDTO> taskUnitDTOs = new List<ViewTaskUnitDTO>();
+            ViewTaskUnitDTO tempTaskUnitDTO;
+            for (int i = 0; i < result.Count(); i++)
+            {
+                tempTaskUnitDTO = _mapper.Map<TaskUnit, ViewTaskUnitDTO>(result.ElementAt(i));
+                taskUnitDTOs.Add(tempTaskUnitDTO);
+            }
+
+            return taskUnitDTOs;
+        }
+
         public async Task<IList<ViewTaskUnitDTO>> GetAllTaskUnitsAsync()
         {
             IList<TaskUnit> result = await _taskUnitRepository.GetAllTaskUnitsAsync();
@@ -69,6 +83,12 @@ namespace TaskManagment.Domain
             return taskUnitDTOs;
         }
 
+        public async Task<ViewTaskUnitDTO>  GetBackSoftDeletedTaskUnitByIdAsync(int id)
+        {
+             await _taskUnitRepository.GetBackSoftDeleteTaskUnitByIdAsync(id);
+            return _mapper.Map<TaskUnit, ViewTaskUnitDTO>(await _taskUnitRepository.GetTaskUnitByIdAsync(id));
+        }
+
         public  async Task<ViewTaskUnitDTO> GetTaskUnitByIdAsync(int id)
         {
             return _mapper.Map<TaskUnit, ViewTaskUnitDTO>( await _taskUnitRepository.GetTaskUnitByIdAsync(id));
@@ -77,6 +97,7 @@ namespace TaskManagment.Domain
         public  async Task<TaskUnitDTO> SaveTaskUnitAsync(TaskUnitDTO taskUnitDto)
         {
             TaskUnit taskUnit = _mapper.Map<TaskUnitDTO, TaskUnit>(taskUnitDto);
+            taskUnit.SoftDeleted = false;
             
             TaskUnitDTO taskUnitD= _mapper.Map<TaskUnit, TaskUnitDTO>(await _taskUnitRepository.SaveTaskUnitAsync(taskUnit));
 
@@ -97,6 +118,10 @@ namespace TaskManagment.Domain
                 }
             }
             return taskUnitDto;
+        }
+        public async Task SoftDeleteTaskUnitAsync(int id)
+        {
+            _taskUnitRepository.SoftDeleteTaskUnitAsync(id);
         }
     }
 }
