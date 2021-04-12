@@ -23,6 +23,8 @@ namespace TaskManagment.AppData
         {
             modelBuilder.Entity<AssignedUserTaskUnit>()
             .HasKey(cs => new { cs.AssignedUserId, cs.TaskUnitId });
+
+            modelBuilder.Entity<TaskUnit>().HasQueryFilter(x => !x.SoftDeleted);
         }
     }
 }

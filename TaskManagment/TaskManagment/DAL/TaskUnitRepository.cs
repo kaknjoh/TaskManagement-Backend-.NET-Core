@@ -29,9 +29,21 @@ namespace TaskManagment.DAL
             await _context.SaveChangesAsync();
         }
 
+        public async Task<IList<TaskUnit>> GetAllSoftDeletedTaskUnitsAsync()
+        {
+            return await _context.Tasks.AsNoTracking().IgnoreQueryFilters().Include(cs => cs.AssignedUserTaskUnits).ThenInclude(x => x.AssignedUser).Where(x => x.SoftDeleted).ToListAsync();
+        }
+
         public async Task<IList<TaskUnit>> GetAllTaskUnitsAsync()
         {
             return await _context.Tasks.AsNoTracking().Include(cs => cs.AssignedUserTaskUnits).ThenInclude( x=> x.AssignedUser).ToListAsync();
+        }
+
+        public async Task GetBackSoftDeleteTaskUnitByIdAsync(int id)
+        {
+            var result = _context.Tasks.IgnoreQueryFilters().Single(x => x.TaskUnitId==id);
+            result.SoftDeleted = false;
+            await _context.SaveChangesAsync();   
         }
 
         public async Task<TaskUnit> GetTaskUnitByIdAsync(int id)
@@ -39,14 +51,18 @@ namespace TaskManagment.DAL
             return await _context.Tasks.AsNoTracking().Include(cs => cs.AssignedUserTaskUnits).ThenInclude(x=> x.AssignedUser).SingleOrDefaultAsync(cs => cs.TaskUnitId == id);
         }
 
-        
-
         public async Task<TaskUnit> SaveTaskUnitAsync(TaskUnit taskUnit)
         {
             _context.Tasks.Add(taskUnit);
             await _context.SaveChangesAsync();
-            return taskUnit;
-            
+            return taskUnit;   
+        }
+
+        public async Task SoftDeleteTaskUnitAsync(int id)
+        {
+            var result = _context.Tasks.Find(id);
+            result.SoftDeleted = true;
+            await _context.SaveChangesAsync();
         }
     }
 }

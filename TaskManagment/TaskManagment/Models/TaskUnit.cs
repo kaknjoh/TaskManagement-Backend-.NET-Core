@@ -19,6 +19,8 @@ namespace TaskManagment.Models
 
         public DateTime EndDate { get; set; }
 
+        public bool SoftDeleted { get; set; }
+
         public ICollection<AssignedUserTaskUnit> AssignedUserTaskUnits { get; set; }
 
         

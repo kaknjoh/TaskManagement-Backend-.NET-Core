@@ -20,5 +20,11 @@ namespace TaskManagment.Domain
 
         public Task DeleteTaskUnitAsync(ViewTaskUnitDTO taskUnit);
 
+        public Task SoftDeleteTaskUnitAsync(int id);
+
+        public Task<ViewTaskUnitDTO>  GetBackSoftDeletedTaskUnitByIdAsync(int id);
+
+        public Task<IList<ViewTaskUnitDTO>> GetAllSoftDeletedTaskUnitsAsync();
+
     }
 }
