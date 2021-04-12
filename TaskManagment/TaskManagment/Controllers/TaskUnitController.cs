@@ -13,7 +13,7 @@ using TaskManagment.Models;
 
 namespace TaskManagment.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class TaskUnitController : ControllerBase
     {
@@ -27,22 +27,21 @@ namespace TaskManagment.Controllers
             this._taskUnitRepository = _taskUnitRepository;
         }
 
-        // GET: api/taskunit  
+        // GET api/taskunit/getalltaskunits  
         [HttpGet]
         public async Task<IActionResult>GetAllTaskUnits()
         {
             return Ok(await _taskUnitService.GetAllTaskUnitsAsync());
         }
 
-        // GET: api/taskunit/getallsoftdeletedtaskunits
-        
-        [HttpGet("getallsoftdeletedtaskunits")]
+        // GET api/taskunit/getallsoftdeletedtaskunits
+        [HttpGet]
         public async Task<IActionResult> GetAllSoftDeletedTaskUnits()
         {
             return Ok(await _taskUnitService.GetAllSoftDeletedTaskUnitsAsync());
         }
 
-        // GET api/taskunit/5
+        // GET:api/taskunit/gettaskunitbyid/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTaskUnitById(int id)
         {
@@ -51,13 +50,11 @@ namespace TaskManagment.Controllers
             {
                 return NotFound();
             }
-
             return  Ok(await _taskUnitService.GetTaskUnitByIdAsync(id));
         }
 
-
-        // GET api/taskunit/getbacksoftdeletedtaskunit/5
-        [HttpGet("getbacksoftdeletedtaskunit/{id}")]
+        // GET api/taskunit/getbacksoftdeletedtaskunitbyid/5
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetBackSoftDeletedTaskUnitById(int id)
         {
             ViewTaskUnitDTO taskUnitInDb = await _taskUnitService.GetTaskUnitByIdAsync(id);
@@ -68,9 +65,9 @@ namespace TaskManagment.Controllers
             return NotFound();
         }
 
-        // POST taskunit/Post
+        // POST api/taskunit/savetaskunit
         [HttpPost]
-        public async Task<IActionResult> SavePost(TaskUnitDTO taskUnitDto)
+        public async Task<IActionResult> SaveTaskUnit(TaskUnitDTO taskUnitDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -79,9 +76,9 @@ namespace TaskManagment.Controllers
             return CreatedAtAction(nameof(GetBackSoftDeletedTaskUnitById), new { id =  result.TaskUnitId}, taskUnitDto);
         }
 
-        // PUT api/taskunit
+        // PUT api/taskunit/updatetaskunit
         [HttpPut]
-        public async Task<IActionResult> Put( TaskUnitDTO taskUnit)
+        public async Task<IActionResult> UpdateTaskUnit( TaskUnitDTO taskUnit)
         {
             ViewTaskUnitDTO taskUnitDTO = await _taskUnitService.GetTaskUnitByIdAsync(taskUnit.TaskUnitId);
             if (taskUnitDTO == null)
@@ -92,7 +89,7 @@ namespace TaskManagment.Controllers
             return Ok();
         }
 
-        // DELETE api/taskunit/5
+        // DELETE api/taskunit/delete/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -106,7 +103,7 @@ namespace TaskManagment.Controllers
         }
 
         // DELETE api/taskunit/softdeletetaskunit/5
-        [HttpDelete("softdeletetaskunit/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> SoftDeleteTaskUnit(int id)
         {
             ViewTaskUnitDTO taskUnitDTO = await _taskUnitService.GetTaskUnitByIdAsync(id);

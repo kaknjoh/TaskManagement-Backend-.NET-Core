@@ -97,7 +97,6 @@ namespace TaskManagment.Domain
         public  async Task<TaskUnitDTO> SaveTaskUnitAsync(TaskUnitDTO taskUnitDto)
         {
             TaskUnit taskUnit = _mapper.Map<TaskUnitDTO, TaskUnit>(taskUnitDto);
-            taskUnit.SoftDeleted = false;
             
             TaskUnitDTO taskUnitD= _mapper.Map<TaskUnit, TaskUnitDTO>(await _taskUnitRepository.SaveTaskUnitAsync(taskUnit));
 

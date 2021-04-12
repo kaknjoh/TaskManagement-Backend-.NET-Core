@@ -43,8 +43,7 @@ namespace TaskManagment.DAL
         {
             var result = _context.Tasks.IgnoreQueryFilters().Single(x => x.TaskUnitId==id);
             result.SoftDeleted = false;
-            await _context.SaveChangesAsync();
-            
+            await _context.SaveChangesAsync();   
         }
 
         public async Task<TaskUnit> GetTaskUnitByIdAsync(int id)
@@ -52,14 +51,11 @@ namespace TaskManagment.DAL
             return await _context.Tasks.AsNoTracking().Include(cs => cs.AssignedUserTaskUnits).ThenInclude(x=> x.AssignedUser).SingleOrDefaultAsync(cs => cs.TaskUnitId == id);
         }
 
-        
-
         public async Task<TaskUnit> SaveTaskUnitAsync(TaskUnit taskUnit)
         {
             _context.Tasks.Add(taskUnit);
             await _context.SaveChangesAsync();
-            return taskUnit;
-            
+            return taskUnit;   
         }
 
         public async Task SoftDeleteTaskUnitAsync(int id)

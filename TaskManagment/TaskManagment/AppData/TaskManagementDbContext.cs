@@ -26,6 +26,5 @@ namespace TaskManagment.AppData
 
             modelBuilder.Entity<TaskUnit>().HasQueryFilter(x => !x.SoftDeleted);
         }
-
     }
 }
